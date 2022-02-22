@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using teste.Entities;
+using teste.Entities.Enums;
 
 namespace teste
 {
@@ -7,54 +9,56 @@ namespace teste
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("----------DEPARTAMENTO-----------");
+            Console.Write("Entre com o nome do Departamento: ");
+            string departamento = Console.ReadLine();
+            Console.WriteLine("---------------------------------");
+            Console.WriteLine("-----------TRABALHADOR-----------");
+            Console.WriteLine("Entre com os dados do trabalhador:");
+            Console.Write("Nome: ");
+            string nome = Console.ReadLine();
+            Console.Write("Level (Junior/MidLevel/Senior): ");
+            WorkerLevel level = Enum.Parse<WorkerLevel>(Console.ReadLine());
+            Console.Write("Salário base: R$");
+            double salarioBase = double.Parse(Console.ReadLine());
 
-
-            List<Pessoa> lista = new List<Pessoa>();
-
-            Console.Write("Quantos Funcionários vão ser cadastrados? ");
-            int numero = int.Parse(Console.ReadLine());
-            Console.WriteLine();
-
-            for (int i = 0; i < numero; i++)
+            Department dept = new Department(departamento);
+            Worker trabalhador = new Worker(nome, salarioBase, level, dept);
+            Console.WriteLine("---------------------------------");
+            Console.Write("Quantos contratos para esse trabalhador: ");
+            int quantidadeContratos = int.Parse(Console.ReadLine());
+            for(int i = 1; i <= quantidadeContratos; i++)
             {
-                int x = i + 1;
-                Console.WriteLine("Numero #" + x);
-                Console.Write("Id:");
-                var id = int.Parse(Console.ReadLine());
-                Console.Write("Nome:");
-                var nome = Console.ReadLine();
-                Console.Write("Salário:");
-                var salario = double.Parse(Console.ReadLine());
-                lista.Add(new Pessoa(id, nome, salario));
                 Console.WriteLine();
+                Console.WriteLine($"Entre com o contrato #{i}:");
+                Console.Write("Data (DD/MM/YYYY): ");
+                DateTime data = DateTime.Parse(Console.ReadLine());
+                Console.Write("Valor por hora: R$");
+                int valorPorHora = int.Parse(Console.ReadLine());
+                Console.Write("Quantidade de horas: ");
+                int horas = int.Parse(Console.ReadLine());
+                HourContract contrato = new HourContract(valorPorHora, horas, data);
+                trabalhador.AddContract(contrato);
 
             }
-
-            Console.Write("Entre com o Id do funcionário que vai ter modificação salarial: ");
-            var y = int.Parse(Console.ReadLine());
-            Pessoa pessoaId = lista.Find(x => x.Id == y);
-            if(pessoaId != null)
-            {
-                Console.Write("Qual vai ser a porcentagem do aumento? ");
-                var z = double.Parse(Console.ReadLine());
-                pessoaId.Aumento(z);
-
-            }
-            else
-            {
-                Console.WriteLine("Esse id não existe.");
-            }
-
-          
+            Console.WriteLine("");
+            Console.WriteLine("---------------------------------");
+            Console.Write("Entre com o mês e ano para calcular Income (MM/YYYY): ");
+            string mesAno = Console.ReadLine();
+            int mes = int.Parse(mesAno.Substring(0, 2));
+            int ano = int.Parse(mesAno.Substring(3));
 
 
-            
-             Console.WriteLine("Lista de Funcionários:");
+            Console.Write("Name: ");
+            Console.WriteLine(trabalhador.Name);
+            Console.Write("Department: ");
+            Console.WriteLine(trabalhador.Department.Name);
+            Console.Write("Income for " + mesAno +": R$" );
 
-             foreach(Pessoa obj in lista)
-             {
-                 Console.WriteLine(obj.ToString());
-             }
+            Console.WriteLine(trabalhador.Income(ano, mes));
+
+
+
 
 
 
